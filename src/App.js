@@ -1,6 +1,9 @@
 import "./App.css";
 import { Card } from "./Card";
 import Table from "./Table";
+import { Carousel } from "./Carousel";
+import { Home } from "./Home";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 const cards = [
   {
@@ -29,24 +32,45 @@ const cards = [
   },
 ];
 function App() {
-  function getColor(index) {
-    switch (index) {
-      case 0:
-        return "green";
-      case 1:
-        return "pink";
-      case 2:
-        return "purple";
-      case 3:
-        return "grey";
-      default:
-        return "blue";
-    }
-  }
+  //   function getColor(index) {
+  //     switch (index) {
+  //       case 0:
+  //         return "green";
+  //       case 1:
+  //         return "pink";
+  //       case 2:
+  //         return "purple";
+  //       case 3:
+  //         return "grey";
+  //       default:
+  //         return "blue";
+  //     }
+  //   }
   return (
     <div className='App'>
-      <Table cards={cards} />
-      {/* <Card card={card} color={getColor(index)} key={card.name} />; */}
+      <Router>
+        <div>
+          <nav>
+            <ul style={{ display: "flex", justifyContent: "space-between" }}>
+              <li style={{ listStyleType: "none" }}>
+                <Link to='/'>Home</Link>
+              </li>
+              <li style={{ listStyleType: "none" }}>
+                <Link to='/table'>Table</Link>
+              </li>
+              <li style={{ listStyleType: "none" }}>
+                <Link to='/game'>Carousel</Link>
+              </li>
+            </ul>
+          </nav>
+
+          <Routes>
+            <Route path='/table' element={<Table cards={cards} />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/game' element={<Carousel cards={cards} />} />
+          </Routes>
+        </div>
+      </Router>
     </div>
   );
 }

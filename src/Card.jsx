@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./card.css";
 
-export const Card = ({ card, color }) => {
-  const { name, price, speed, text } = card;
+export const Card = ({ name,speed }) => {
+ 
   
 
   const [isSelected, setIsSelected] = useState(false);
@@ -18,7 +18,7 @@ export const Card = ({ card, color }) => {
 
 
   return (
-    <div className={`card ${color}`  }>
+    <div >
       {isSelected ? (
         <input
           type='text'
@@ -28,12 +28,12 @@ export const Card = ({ card, color }) => {
         />
       ) : (
         <div className='name' onClick={() => setIsSelected(true)}>
-          {value}
+          {name}
         </div>
       )}
-      <div className='price'>{price}</div>
+      {/* <div className='price'>{price}</div> */}
       <div className='speed'>{speed}</div>
-      <div className='text'>{text}</div>
+      {/* <div className='text'>{text}</div> */}
     </div>
   );
 };
