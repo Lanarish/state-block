@@ -4,6 +4,7 @@ import Table from "./Table";
 import { Carousel } from "./Carousel";
 import { Home } from "./Home";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import UserList from "./useEffect";
 
 const cards = [
   {
@@ -48,7 +49,8 @@ function App() {
   //   }
   return (
     <div className='App'>
-      <Router>
+      <UserList />
+      {/* <Router>
         <div>
           <nav>
             <ul style={{ display: "flex", justifyContent: "space-between" }}>
@@ -70,7 +72,7 @@ function App() {
             <Route path='/game' element={<Carousel cards={cards} />} />
           </Routes>
         </div>
-      </Router>
+      </Router> */}
     </div>
   );
 }
