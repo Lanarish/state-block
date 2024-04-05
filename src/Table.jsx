@@ -1,6 +1,7 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
+import styles from "./Table.module.css";
 
-const Table = ({ cards }) => {
+const Table = ({ data, handleSaveNewWord }) => {
   return (
     <div>
       <table border='1'>
@@ -11,8 +12,14 @@ const Table = ({ cards }) => {
           <th>Speed</th>
           <th>Buttons</th>
         </tr>
-        {cards.map((card) => {
-          return <TableRow rowData={card} key={card.id} />;
+        {data.map((card) => {
+          return (
+            <TableRow
+              rowData={card}
+              key={card.id}
+              handleSaveNewWord={handleSaveNewWord}
+            />
+          );
         })}
       </table>
     </div>
@@ -21,55 +28,68 @@ const Table = ({ cards }) => {
 
 export default Table;
 
-const TableRow = ({ rowData }) => {
+const TableRow = ({ rowData, handleSaveNewWord }) => {
   const { id, name, price, speed } = rowData;
   const [isSelected, setIsSelected] = useState(false);
   const [value, setValue] = useState({
-    id:id,
-    name:name,
-    price:price,
-    speed:speed,
+    id: id,
+    name: name,
+    price: price,
+    speed: speed,
   });
-
 
   function handleClose() {
     setIsSelected(!isSelected);
     setValue({ ...rowData });
   }
-  function handleSave() {
-    setValue({...value});
-    setIsSelected(!isSelected);
-  }
-
   function handleEdit() {
     setIsSelected(!isSelected);
   }
-
+  const [errors, setErrors] = useState({
+    name: false,
+    price: false,
+    speed: false,
+  });
+  function handleSave() {
+    if (value.name.match(/[a-zA-Z]/gm)) {
+      setErrors({ ...errors, name: "Just russian letters" });
+    } else {
+      handleSaveNewWord(value, rowData.id);
+      setIsSelected(!isSelected);
+    }
+  }
   function handleChange(event) {
-    setValue((prevValue) => {
-      return { ...prevValue, [event.target.name]: event.target.value };
+    setValue({ ...value, [event.target.name]: event.target.value });
+
+    setErrors({
+      ...errors,
+      [event.target.name]:
+        event.target.value.trim() === "" ? "Field cannot be empty" : false,
     });
   }
- 
+
+  const isBtnDisabled = Object.values(errors).some((elem) => elem);
+
   return isSelected ? (
     <tr>
-      <td>
-        <td>{id}</td>
-      </td>
+      <td>{id}</td>
       <td>
         <input
           type='text'
           value={value.name}
-          name={'name'}
+          name={"name"}
           onChange={handleChange}
+          className={errors.name ? styles.error_border : ""}
         />
+        <p>{errors.name && errors.name}</p>
       </td>
       <td>
         <input
           type='text'
           value={value.price}
-          name={'price'}
+          name={"price"}
           onChange={handleChange}
+          className={errors.price ? styles.error_border : ""}
         />
       </td>
 
@@ -77,19 +97,22 @@ const TableRow = ({ rowData }) => {
         <input
           type='text'
           value={value.speed}
-          name={'speed'}
+          name={"speed"}
           onChange={handleChange}
+          className={errors.speed ? styles.error_border : ""}
         />
       </td>
-      <button onClick={handleSave}>Save</button>
+      <button onClick={handleSave} disabled={isBtnDisabled}>
+        Save
+      </button>
       <button onClick={handleClose}>Close</button>
     </tr>
   ) : (
     <tr>
-      <td>{id}</td>
-      <td>{value.name}</td>
-      <td>{value.price}</td>
-      <td>{value.speed}</td>
+      <td>{rowData.id}</td>
+      <td>{name}</td>
+      <td>{price}</td>
+      <td>{speed}</td>
       <td>
         <td>
           <button onClick={handleEdit}>Edit</button>
@@ -100,26 +123,20 @@ const TableRow = ({ rowData }) => {
   );
 };
 
+// const CardWrapper=()=>{
 
+//   return(
+//     <>
+//     <button>Next</button>
+//     <Card />
+//     <button>Previous</button>
 
-const CardWrapper=()=>{
+//     </>
+//   )
+// }
 
-  
-  return(
-    <>
-    <button>Next</button>
-    <Card />
-    <button>Previous</button>
-    
-    </>
-  )
-}
-
-
-
-
-const Card =({english})=>{
-  return(
-    <div>{english}</div>
-  )
-}
+// const Card =({english})=>{
+//   return(
+//     <div>{english}</div>
+//   )
+// }
