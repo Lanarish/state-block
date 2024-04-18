@@ -5,14 +5,19 @@ import TodoBar from "./TodoBar";
 import TodoAdd from "./TodoAdd";
 import TodoList from "./TodoList";
 import { TaskProvider } from "./TaskContext";
+import Table from "./Table";
+import { WordsProvider } from "./WordsContext";
 
 function App() {
   return (
     <TaskProvider>
       <div className='App'>
-        <TodoBar />
+        <WordsProvider>
+          <Table />
+        </WordsProvider>
+        {/* <TodoBar />
         <TodoAdd />
-        <TodoList />
+        <TodoList /> */}
       </div>
     </TaskProvider>
   );

@@ -1,6 +1,9 @@
-import React, { useState} from "react";
+import React, { useState, useContext } from "react";
+import { WordsContext } from "./WordsContext";
 
-const Table = ({ cards }) => {
+const Table = () => {
+  const { words, setWords } = useContext(WordsContext);
+  console.log("words",words)
   return (
     <div>
       <table border='1'>
@@ -11,8 +14,8 @@ const Table = ({ cards }) => {
           <th>Speed</th>
           <th>Buttons</th>
         </tr>
-        {cards.map((card) => {
-          return <TableRow rowData={card} key={card.id} />;
+        {words.map((word) => {
+          return <TableRow rowData={word} key={word.id} />;
         })}
       </table>
     </div>
@@ -22,22 +25,23 @@ const Table = ({ cards }) => {
 export default Table;
 
 const TableRow = ({ rowData }) => {
-  const { id, name, price, speed } = rowData;
+  const {handleSave} = useContext(WordsContext);
+  const { id, english, transcription, russian } = rowData;
   const [isSelected, setIsSelected] = useState(false);
   const [value, setValue] = useState({
-    id:id,
-    name:name,
-    price:price,
-    speed:speed,
+    id: id,
+    english,
+    transcription,
+    russian,
   });
-
 
   function handleClose() {
     setIsSelected(!isSelected);
     setValue({ ...rowData });
   }
-  function handleSave() {
-    setValue({...value});
+  function handleSaveWord() {
+    handleSave(value,value.id)
+    setValue({ ...value });
     setIsSelected(!isSelected);
   }
 
@@ -50,7 +54,7 @@ const TableRow = ({ rowData }) => {
       return { ...prevValue, [event.target.name]: event.target.value };
     });
   }
- 
+
   return isSelected ? (
     <tr>
       <td>
@@ -59,16 +63,16 @@ const TableRow = ({ rowData }) => {
       <td>
         <input
           type='text'
-          value={value.name}
-          name={'name'}
+          value={value.english}
+          name={"english"}
           onChange={handleChange}
         />
       </td>
       <td>
         <input
           type='text'
-          value={value.price}
-          name={'price'}
+          value={value.transcription}
+          name={"transcription"}
           onChange={handleChange}
         />
       </td>
@@ -76,20 +80,20 @@ const TableRow = ({ rowData }) => {
       <td>
         <input
           type='text'
-          value={value.speed}
-          name={'speed'}
+          value={value.russian}
+          name={"russian"}
           onChange={handleChange}
         />
       </td>
-      <button onClick={handleSave}>Save</button>
+      <button onClick={handleSaveWord}>Save</button>
       <button onClick={handleClose}>Close</button>
     </tr>
   ) : (
     <tr>
       <td>{id}</td>
-      <td>{value.name}</td>
-      <td>{value.price}</td>
-      <td>{value.speed}</td>
+      <td>{value.english}</td>
+      <td>{value.transcription}</td>
+      <td>{value.russian}</td>
       <td>
         <td>
           <button onClick={handleEdit}>Edit</button>
@@ -100,26 +104,16 @@ const TableRow = ({ rowData }) => {
   );
 };
 
+// const CardWrapper = () => {
+//   return (
+//     <>
+//       <button>Next</button>
+//       <Card />
+//       <button>Previous</button>
+//     </>
+//   );
+// };
 
-
-const CardWrapper=()=>{
-
-  
-  return(
-    <>
-    <button>Next</button>
-    <Card />
-    <button>Previous</button>
-    
-    </>
-  )
-}
-
-
-
-
-const Card =({english})=>{
-  return(
-    <div>{english}</div>
-  )
-}
+// const Card = ({ english }) => {
+//   return <div>{english}</div>;
+// };
