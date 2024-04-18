@@ -4,17 +4,23 @@ import "./App.css";
 import TodoBar from "./TodoBar";
 import TodoAdd from "./TodoAdd";
 import TodoList from "./TodoList";
-import { TaskProvider } from "./TaskContext";
+// import { TaskProvider } from "./TaskContext";
+import TaskStore from "./TaskStore";
+import { Provider } from "mobx-react";
+
+const store = {
+  tasksStore: new TaskStore(),
+};
 
 function App() {
   return (
-    <TaskProvider>
+    <Provider {...store}>
       <div className='App'>
         <TodoBar />
         <TodoAdd />
         <TodoList />
       </div>
-    </TaskProvider>
+    </Provider>
   );
 }
 
